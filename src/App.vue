@@ -10,7 +10,6 @@
         </RouterView>
       </ErrorBoundary>
     </main>
-    <Footer />
     <Loading :loading="appStore.loading" />
     <Toast />
     <ConfirmDialog />
@@ -23,7 +22,6 @@
 <script setup lang="ts">
 import { useAppStore } from './stores/app'
 import Navbar from './components/Navbar.vue'
-import Footer from './components/Footer.vue'
 import Loading from './components/Loading.vue'
 import Toast from './components/Toast.vue'
 import ConfirmDialog from './components/ConfirmDialog.vue'

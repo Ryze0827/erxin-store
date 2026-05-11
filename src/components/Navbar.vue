@@ -10,7 +10,7 @@
       </router-link>
 
       <!-- Desktop Menu -->
-      <div class="hidden lg:flex items-center space-x-1 min-w-0 overflow-x-auto scrollbar-hide">
+      <div v-if="menuItems.length" class="hidden lg:flex items-center space-x-1 min-w-0 overflow-x-auto scrollbar-hide">
         <template v-for="item in menuItems" :key="item.key">
           <router-link v-if="item.type === 'route'" :to="item.path"
             class="theme-nav-link text-sm relative group overflow-hidden flex items-center gap-1.5 whitespace-nowrap shrink-0"
@@ -32,6 +32,15 @@
 
       <!-- Right Side Actions -->
       <div class="flex items-center shrink-0 space-x-2 lg:space-x-4">
+        <router-link v-if="showNoticeLink" to="/notice"
+          class="hidden lg:flex theme-nav-link gap-2 px-3 min-w-[44px] min-h-[44px] items-center justify-center whitespace-nowrap"
+          active-class="theme-nav-link-active">
+          <svg class="w-4 h-4 shrink-0 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" :d="noticeIcon" />
+          </svg>
+          <span class="text-xs font-medium">{{ t('nav.notice') }}</span>
+        </router-link>
+
         <!-- Cart (desktop only, mobile has bottom nav) -->
         <router-link to="/cart"
           class="hidden lg:flex theme-nav-link relative gap-2 px-3 min-w-[44px] min-h-[44px] items-center justify-center whitespace-nowrap">
@@ -334,27 +343,28 @@ const buildCustomNavItems = (): NavItem[] => {
     .filter((item) => item.label && item.path)
 }
 
-const buildBuiltinNavItems = (): NavItem[] => {
+const buildBuiltinNavItemsByKeys = (keys: string[]): NavItem[] => {
   const builtin = navConfig.value?.builtin
-  const result: NavItem[] = []
-  for (const [key, def] of Object.entries(builtinNavDefs)) {
-    if (builtin && builtin[key] === false) continue
-    result.push({ key, path: def.path, label: def.label, icon: def.icon, type: 'route', target: '_self' })
-  }
-  return result
+  return keys
+    .filter((key) => !builtin || builtin[key] !== false)
+    .map((key) => {
+      const def = builtinNavDefs[key]!
+      return { key, path: def.path, label: def.label, icon: def.icon, type: 'route' as const, target: '_self' }
+    })
+    .filter((item) => item.path)
 }
 
 const menuItems = computed<NavItem[]>(() => {
-  const items: NavItem[] = buildBuiltinNavItems()
-  items.push(...buildCustomNavItems())
-  return items
+  return buildCustomNavItems()
 })
 
 // Mobile drawer only shows items not in the bottom nav.
 const mobileDrawerItems = computed<NavItem[]>(() => {
-  const items: NavItem[] = [...buildBuiltinNavItems(), ...buildCustomNavItems()]
-  return items
+  return [...buildBuiltinNavItemsByKeys(['notice']), ...buildCustomNavItems()]
 })
+
+const noticeIcon = builtinNavDefs.notice!.icon
+const showNoticeLink = computed(() => navConfig.value?.builtin?.notice !== false)
 
 const languages = [
   { code: 'zh-CN', name: '简体中文' },

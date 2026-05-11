@@ -165,7 +165,7 @@ const messages = {
             searchBoxPlaceholder: '搜索商品名称或关键词...',
             viewDetails: '查看详情',
             quickBuy: '购买',
-            totalSold: 'Sold',
+            totalSold: '已售',
             credentialAvailable: '有凭证',
             credentialMissing: '缺凭证',
             credentialUnavailable: '暂时无法充值',
@@ -1349,7 +1349,7 @@ const messages = {
             searchBoxPlaceholder: '搜尋商品名稱或關鍵詞...',
             viewDetails: '查看詳情',
             quickBuy: '購買',
-            totalSold: 'Sold',
+            totalSold: '已售',
             credentialAvailable: '有憑證',
             credentialMissing: '缺憑證',
             credentialUnavailable: '暫時無法儲值',
@@ -3561,18 +3561,6 @@ const supportedLocales = ['zh-CN', 'zh-TW', 'en-US']
 function detectLocale(): string {
     const saved = localStorage.getItem('locale')
     if (saved && supportedLocales.includes(saved)) return saved
-
-    const browserLang = navigator.language || ''
-    if (supportedLocales.includes(browserLang)) return browserLang
-
-    const langPrefix = browserLang.split('-')[0]
-    if (langPrefix === 'zh') {
-        if (browserLang.includes('TW') || browserLang.includes('HK') || browserLang.includes('Hant')) {
-            return 'zh-TW'
-        }
-        return 'zh-CN'
-    }
-    if (langPrefix === 'en') return 'en-US'
 
     return 'zh-CN'
 }

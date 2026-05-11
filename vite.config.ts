@@ -31,19 +31,19 @@ export default defineConfig(({ mode }) => ({
     strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://47.111.178.20:8081',
+        target: 'http://localhost:8080',
         changeOrigin: true,
       },
       '/uploads': {
-        target: 'http://47.111.178.20:8081',
+        target: 'http://localhost:8080',
         changeOrigin: true,
       },
       '/sitemap.xml': {
-        target: 'http://47.111.178.20:8081',
+        target: 'http://localhost:8080',
         changeOrigin: true,
       },
       '/robots.txt': {
-        target: 'http://47.111.178.20:8081',
+        target: 'http://localhost:8080',
         changeOrigin: true,
       },
     }

@@ -4,8 +4,8 @@
       <div class="mt-12">
         <main class="flex-1">
           <!-- Loading Skeleton -->
-          <div v-if="loading" class="grid grid-cols-2 gap-3 md:gap-4 md:grid-cols-3 lg:grid-cols-4">
-            <div v-for="i in 6" :key="i"
+          <div v-if="loading" class="grid grid-cols-2 gap-3 md:gap-4 md:grid-cols-3 lg:grid-cols-5">
+            <div v-for="i in 5" :key="i"
               class="theme-panel rounded-2xl border overflow-hidden flex flex-col">
               <div class="h-36 md:h-56 theme-skeleton"></div>
               <div class="p-3 md:p-5 space-y-3">
@@ -27,7 +27,7 @@
 
           <!-- Products Grid -->
           <div v-else-if="sortedProducts.length > 0">
-            <div class="grid grid-cols-2 gap-3 md:gap-4 md:grid-cols-3 lg:grid-cols-4">
+            <div class="grid grid-cols-2 gap-3 md:gap-4 md:grid-cols-3 lg:grid-cols-5">
               <ProductCard
                 v-for="(product, idx) in sortedProducts"
                 :key="product.id"

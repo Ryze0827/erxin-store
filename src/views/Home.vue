@@ -296,7 +296,27 @@
           </router-link>
         </div>
 
-        <div v-if="products.length > 0" class="grid grid-cols-2 gap-3 md:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div v-if="productsLoading" class="grid grid-cols-2 gap-3 md:gap-4 md:grid-cols-3 lg:grid-cols-5">
+          <div v-for="i in homeProductSkeletonCount" :key="i"
+            class="theme-panel rounded-2xl border overflow-hidden flex flex-col">
+            <div class="h-36 md:h-56 theme-skeleton"></div>
+            <div class="p-3 md:p-4 space-y-3">
+              <div class="h-3 w-16 rounded theme-skeleton"></div>
+              <div class="h-5 w-3/4 rounded theme-skeleton"></div>
+              <div class="flex gap-2">
+                <div class="h-5 w-14 rounded-full theme-skeleton"></div>
+                <div class="h-5 w-14 rounded-full theme-skeleton"></div>
+              </div>
+              <div class="h-3 w-full rounded theme-skeleton"></div>
+              <div class="h-3 w-2/3 rounded theme-skeleton"></div>
+              <div class="border-t theme-border pt-3 flex justify-between items-center">
+                <div class="h-6 w-20 rounded theme-skeleton"></div>
+                <div class="h-4 w-16 rounded theme-skeleton"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else-if="products.length > 0" class="grid grid-cols-2 gap-3 md:gap-4 md:grid-cols-3 lg:grid-cols-5">
           <ProductCard
             v-for="(product, idx) in products"
             :key="product.id"
@@ -393,9 +413,11 @@ const latestSectionVisible = computed(() => blogEnabled.value || noticeEnabled.v
 
 // ==================== Shared State ====================
 const products = ref<any[]>([])
+const productsLoading = ref(true)
 const posts = ref<any[]>([])
 const quickBuyProduct = ref<any>(null)
 const quickBuyVisible = ref(false)
+const homeProductSkeletonCount = 5
 
 const openQuickBuy = (product: any) => {
   quickBuyProduct.value = product
@@ -481,11 +503,14 @@ const goToPost = (slug: string) => {
 }
 
 const loadFeaturedProducts = async () => {
+  productsLoading.value = true
   try {
     const response = await productAPI.list({ page: 1, page_size: 15 })
     products.value = response.data.data || []
   } catch (error) {
     console.error('Failed to load products:', error)
+  } finally {
+    productsLoading.value = false
   }
 }
 

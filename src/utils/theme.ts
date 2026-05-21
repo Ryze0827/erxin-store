@@ -20,7 +20,7 @@ const getStoredTheme = (): Theme | null => {
     }
 }
 
-const theme = ref<Theme>(getStoredTheme() || 'dark')
+const theme = ref<Theme>(getStoredTheme() || 'light')
 const isDark = computed(() => theme.value === 'dark')
 
 const applyTheme = (newTheme: Theme) => {
